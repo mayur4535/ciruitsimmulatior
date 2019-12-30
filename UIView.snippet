@@ -1,0 +1,44 @@
+{
+    "header" : {
+    "imports":[
+      "#import <UIKit/UIKit.h>"
+    ],
+    "interface_tag":[
+      "@interface <CLASS_NAME> : UIView",
+      "{",
+      "<SUBVIEW_DECLARATION>",
+      "}",
+      "@end"
+    ]
+    },
+    "implementation" : {
+      "imports":[
+        "#import \"<CLASS_NAME>.h\""
+      ],
+      "implementation_tag" :[
+        "@implementation <CLASS_NAME>",
+        "@end"
+      ],
+      "create":[
+        "- (instancetype)initWithFrame:(CGRect)frame",
+        "{",
+        "    self = [super initWithFrame:frame];",
+        "    if(self)",
+        "    {",
+        "<SUBVIEW_INIT>",
+        "",
+        "<SUBVIEW_ADD>",
+        "    }",
+        "    return self;",
+        "}"
+      ],
+      "layout":[
+          "- (void)layoutSubviews",
+          "{",
+          "    [super layoutSubviews];",
+          "",
+          "<SUBVIEW_LAYOUT>",
+          "}"
+      ]
+    }
+}

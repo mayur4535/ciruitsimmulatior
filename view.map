@@ -1,0 +1,10 @@
+{
+  "MSBitmapLayer" : "UIImageView",
+  "MSTextLayer" : "UILabel",
+  "MSShapeGroup" : "UIView",
+  "MSColor" : "UIColor",
+  "NSBigMutableString" : "NSString",
+  "NSFont" : "UIFont",
+  "NSImage" : "UIImage",
+  "__NSCFNumber" : "Identity"
+}

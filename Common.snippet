@@ -1,0 +1,101 @@
+{
+  "UIView" : {
+    "create" : {
+      "template" : "[UIView new]"
+    },
+    "imports" : [],
+    "properties" :{
+      "backgroundColor" : "style.fill.color",
+      "layer.cornerRadius" : "layers.firstObject.fixedRadius"
+    },
+    "layout" : {
+      "template" : "[<NAME> setFrame:CGRectMake(<X>, <Y>, <WIDTH>, <HEIGHT>)]",
+      "bindings" : {
+        "<NAME>" : "return dict[\"name\"];",
+        "<X>" : "return Number(dict[\"x\"].toFixed(4));",
+        "<Y>" : "return Number(dict[\"y\"].toFixed(4));",
+        "<WIDTH>" : "return Number(dict[\"width\"].toFixed(4));",
+        "<HEIGHT>" : "return Number(dict[\"height\"].toFixed(4));"
+      }
+    }
+  },
+  "UILabel" : {
+    "create" : {
+      "template" : "[UILabel new]"
+    },
+    "imports" : [],
+    "properties" :{
+      "textColor" : "textColor",
+      "text" : "stringValue",
+      "font" : "font",
+      "alpha" : "style.contextSettings.opacity"
+    },
+    "layout" : {
+      "template" : "[<NAME> setFrame:CGRectMake(<X>, <Y>, <WIDTH>, <HEIGHT>)]",
+      "bindings" : {
+        "<NAME>" : "return dict[\"name\"];",
+        "<X>" : "return Number(dict[\"x\"].toFixed(4));",
+        "<Y>" : "return Number(dict[\"y\"].toFixed(4));",
+        "<WIDTH>" : "return Number(dict[\"width\"].toFixed(4));",
+        "<HEIGHT>" : "return Number(dict[\"height\"].toFixed(4));"
+      }
+    }
+  },
+  "UIFont" : {
+    "create" : {
+      "template" : "[UIFont fontWithName:<NAME> size:<SIZE>]",
+      "bindings" : {
+        "<NAME>" : "return '@\"' + dict[\"fontName\"] + '\"';",
+        "<SIZE>" : "return Math.ceil(dict[\"pointSize\"]);"
+      }
+    }
+  },
+  "UIColor" : {
+    "create" : {
+      "template" : "[UIColor colorWithRed:<r> green:<g> blue:<b> alpha:<a>]",
+      "bindings" : {
+        "<r>" : "return Number(dict[\"red\"].toFixed(4));",
+        "<g>" : "return Number(dict[\"green\"].toFixed(4));",
+        "<b>" : "return Number(dict[\"blue\"].toFixed(4));",
+        "<a>" : "return Number(dict[\"alpha\"].toFixed(4));"
+      }
+    }
+  },
+  "UIImageView" : {
+    "create" : {
+      "template" : "[[UIImageView alloc] initWithImage:[UIImage imageNamed:<NAME>]]",
+      "bindings" : {
+        "<NAME>" : "return '@\"' + dict[\"name\"] + '\"';"
+      }
+    },
+    "layout" : {
+      "template" : "[<NAME> setFrame:CGRectMake(<X>, <Y>, <WIDTH>, <HEIGHT>)]",
+      "bindings" : {
+        "<NAME>" : "return dict[\"name\"];",
+        "<X>" : "return dict[\"x\"];",
+        "<Y>" : "return dict[\"y\"];",
+        "<WIDTH>" : "return dict[\"width\"];",
+        "<HEIGHT>" : "return dict[\"height\"];"
+      }
+    },
+    "export" : {
+      "format": "pdf"
+    }
+  },
+  "NSString" : {
+    "create" : {
+      "template" : "@\"<string>\"",
+      "bindings" : {
+        "<string>" : "return dict[\"description\"];"
+      }
+    }
+  },
+  "Identity" : {
+    "create" : {
+      "template" : "<identity>",
+      "bindings" : {
+        "<identity>" : "return dict[\"description\"];"
+      }
+    }
+  }
+}

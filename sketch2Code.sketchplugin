@@ -1,0 +1,49 @@
+// (ctrl shift p)
+
+@import "./common.js"
+@import "./logger.js"
+@import "./runtime.js"
+@import "./io.js"
+@import "./render-core.js"
+
+if([selection count] == 0)
+{
+   custom_log("No selection found")
+   return
+}
+
+var selectedItem = selection[0]
+
+if (![selectedItem isKindOfClass:[MSLayerGroup class]])
+{
+   custom_log("Not a group")
+   return
+}
+
+custom_log("Target:" + selectedItem)
+
+var baseDir = get_dir_from_prompt()
+
+custom_log("baseDir:" + baseDir)
+
+var webView = [WebView new]
+var generatedNamesCache = [NSMutableDictionary new]
+
+var classMapping = loadObjectMap()
+var viewDescriptors = loadSnippet("Common")
+
+visitLayerInGroup(selectedItem, visitLayerHandler)
+
+function get_dir_from_prompt(){
+    var panel = [NSOpenPanel openPanel];
+    [panel setMessage:"Where do you want to place your assets?"];
+    [panel setCanChooseDirectories: true];
+    [panel setCanChooseFiles: false];
+    [panel setCanCreateDirectories:true];
+    var default_dir = [[doc fileURL] URLByDeletingLastPathComponent];
+    [panel setDirectoryURL:default_dir];
+    if ([panel runModal] == NSOKButton){
+      var message = [panel filename];
+      return message;
+    }
+}
