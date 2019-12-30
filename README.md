@@ -1,102 +1,134 @@
-# CircuitJS1
+# SketchCode
 
-## Introduction
+![](https://img.shields.io/badge/python-3-brightgreen.svg) ![](https://img.shields.io/badge/tensorflow-1.1.0-orange.svg)
 
-CircuitJS1 is an electronic circuit simulator that runs in the browser. It was originally written by Paul Falstad as a Java Applet. It was adapted by Iain Sharp to run in the browser using GWT.
+*Generating HTML Code from a hand-drawn wireframe*
 
-For a hosted version of the application see:
+![Preview](https://github.com/ashnkumar/sketch-code/blob/master/header_image.png)
 
-* Paul's Page: [http://www.falstad.com/circuit/](http://www.falstad.com/circuit/)
-* Iain's Page: [http://lushprojects.com/circuitjs/](http://lushprojects.com/circuitjs/)
+SketchCode is a deep learning model that takes hand-drawn web mockups and converts them into working HTML code. It uses an [image captioning](https://towardsdatascience.com/image-captioning-in-deep-learning-9cd23fb4d8d2) architecture to generate its HTML markup from hand-drawn website wireframes.
 
-Thanks to Edward Calver for 15 new components and other improvements. Thanks to Rodrigo Hausen for file import/export and many other UI improvements. Thanks to J. Mike Rollins for the Zener diode code. Thanks to Julius Schmidt for the spark gap code and some examples. Thanks to Dustin Soodak for help with the user interface improvements. Thanks to Jacob Calvert for the T Flip Flop. 
+For more information, check out this post: [Automating front-end development with deep learning](https://blog.insightdatascience.com/automated-front-end-development-using-deep-learning-3169dd086e82)
 
-## Building the web application
+This project builds on the synthetically generated dataset and model architecture from [pix2code](https://github.com/tonybeltramelli/pix2code) by [Tony Beltramelli](https://github.com/tonybeltramelli) and the [Design Mockups](https://github.com/emilwallner/Screenshot-to-code-in-Keras) project from [Emil Wallner](https://github.com/emilwallner).
 
-The tools you will need to build the project are:
-
-* Eclipse, Oxygen version.
-* GWT plugin for Eclipse.
-
-Install "Eclipse for Java developers" from [here](https://www.eclipse.org/downloads/packages/). To add the GWT plugin for Eclipse follow the instructions [here](https://gwt-plugins.github.io/documentation/gwt-eclipse-plugin/Download.html).
-
-This repository is a project folder for your Eclipse project space. Once you have a local copy you can then build and run in development mode or build for deployment. Running in super development mode is done by clicking on the "run" icon on the toolbar and choosing http://127.0.0.1:8888/circuitjs.html from the "Development Mode" tab which appears. Building for deployment is done by selecting the project root node and using the GWT button on the Eclipse taskbar and choosing "GWT Compile Project...".
-
-GWT will build it's output in to the "war" directory. In the "war" directory the file "iframe.html" is loaded as an iFrame in to the spare space at the bottom of the right hand pannel. It can be used for branding etc.
-
-## Deployment of the web application
-
-* "GWT Compile Project..." as explained above. This will put the outputs in to the "war" directory in the Eclipse project folder. You then need to copy everything in the "war" directory, except the "WEB-INF" directory, on to your web server.
-* Customize the header of the file "circuitjs1.html" to include your tracking, favicon etc.
-* Customize the "iframe.html" file to include any branding you want in the right hand panel of the application
-* The optional file "shortrelay.php" is a server-side script to act as a relay to a URL shortening service to avoid cross-origin problems with a purely client solution. You may want to customize this for your site. If you don't want to use this feature edit the circuitjs1.java file before compiling.
-* If you wish to enable dropbox loading and saving a dropbox API app-key is needed. This should be edited in to the circuitjs.html file where needed. If this is not included the relevant features will be disabled.
+<b>Note:</b> This project is meant as a proof-of-concept; the model isn't (yet) built to generalize to the variability of sketches seen in actual wireframes, and thus its performance relies on wireframes resembling the core dataset.
 
 
-The link for the full-page version of the application is now:
-`http://<your host>/<your path>/circuitjs1.html`
-(you can rename the "circuitjs1.html" file if you want too though you should also update "shortrelay.php" if you do).
+## Setup
+### Prerequisites
 
-Just for reference the files should look like this
+- Python 3 (not compatible with python 2)
+- pip
 
+### Install dependencies
+
+```sh
+pip install -r requirements.txt
 ```
--+ Directory containing the front page (eg "circuitjs")
-  +- circuitjs.html - full page version of application
-  +- iframe.html - see notes above
-  +- shortrelay.php - see notes above
-  ++ circuitjs1 (directory)
-   +- various files built by GWT
-   +- circuits (directory, containing example circuits)
-   +- setuplist.txt (index in to example circuit directory)
+
+## Example Usage
+
+Download the data and pretrained weights:
+```sh
+# Getting the data, 1,700 images, 342mb
+git clone https://github.com/ashnkumar/sketch-code.git
+cd sketch-code
+cd scripts
+
+# Get the data and pretrained weights
+sh get_data.sh
+sh get_pretrained_model.sh
 ```
-   
-## Embedding
 
-You can link to the full page version of the application using the link shown above.
+Converting an example drawn image into HTML code, using pretrained weights:
+```sh
+cd src
 
-If you want to embed the application in another page then use an iframe with the src being the full-page version.
-
-You can add query parameters to link to change the applications startup behaviour. The following are supported:
+python convert_single_image.py --png_path ../examples/drawn_example1.png \
+      --output_folder ./generated_html \
+      --model_json_file ../bin/model_json.json \
+      --model_weights_file ../bin/weights.h5
 ```
-.../circuitjs1.html?cct=<string> // Load the circuit from the URL (like the # in the Java version)
-.../circuitjs1.html?startCircuit=<filename> // Loads the circuit named "filename" from the "Circuits" directory
-.../circuitjs1.html?startCircuitLink=<URL> // Loads the circuit from the specified URL. CURRENTLY THE URL MUST BE A DROPBOX SHARED FILE OR ANOTHER URL THAT SUPPORTS CORS ACCESS FROM THE CLIENT
-.../circuitjs1.html?euroResistors=true // Set to true to force "Euro" style resistors. If not specified the resistor style will be based on the user's browser's language preferences
-.../circuitjs1.html?usResistors=true // Set to true to force "US" style resistors. If not specified the resistor style will be based on the user's browser's language preferences
-.../circuitjs1.html?whiteBackground=<true|false>
-.../circuitjs1.html?conventionalCurrent=<true|false>
+
+
+## General Usage
+
+Converting a single image into HTML code, using weights:
+```sh
+cd src
+
+python convert_single_image.py --png_path {path/to/img.png} \
+      --output_folder {folder/to/output/html} \
+      --model_json_file {path/to/model/json_file.json} \
+      --model_weights_file {path/to/model/weights.h5}
 ```
-## Building an Electron application (experimental)
 
-The [Electron](https://electronjs.org/) project allows web applications to be distributed as local executables for a variety of platforms. This repository contains the additional files needed to build circuitJS1 as an Electron application. Use of electron is experimental at this stage.
+Converting a batch of images in a folder to HTML:
+```sh
+cd src
 
-The general approach to building an Electron application for a particular platform is documented [here](https://electronjs.org/docs/tutorial/application-distribution). The following instructions apply this approach to circuit JS.
+python convert_batch_of_images.py --pngs_path {path/to/folder/with/pngs} \
+      --output_folder {folder/to/output/html} \
+      --model_json_file {path/to/model/json_file.json} \
+      --model_weights_file {path/to/model/weights.h5}
+```
 
-To build the Electron application:
-* Compile the application using GWT, as above.
-* Download and unpack a [pre-built Electron binary directory](https://github.com/electron/electron/releases) version 1.8.7 for the target platform.
-* Copy the "app" directory from this repository to the location specified [here](https://electronjs.org/docs/tutorial/application-distribution) in the Electron binary directory structure.
-* Copy the "war" directory, containing the compiled CircuitJS1 application, in to the "app" directory the Electron binary directory structure.
-* Run the "Electron" executable file. It should automatically load CircuitJS1.
+Train the model:
+```sh
+cd src
 
-Known limitations of the Electron application:
-* The languge is hard-coded to en-US due to [this Electron issue](https://github.com/electron/electron/issues/11053).
-* "Create short URL" on "Export as URL" doesn't work as it relies on server support.
+# training from scratch
+# <augment_training_data> adds Keras ImageDataGenerator augmentation for training images
+python train.py --data_input_path {path/to/folder/with/pngs/guis} \
+      --validation_split 0.2 \
+      --epochs 10 \
+      --model_output_path {path/to/output/model}
+      --augment_training_data 1
 
-Thanks to @Immortalin for the initial work in applying Electron to CircuitJS1.
+# training starting with pretrained model
+python train.py --data_input_path {path/to/folder/with/pngs/guis} \
+      --validation_split 0.2 \
+      --epochs 10 \
+      --model_output_path {path/to/output/model} \
+      --model_json_file ../bin/model_json.json \
+      --model_weights_file ../bin/pretrained_weights.h5 \
+      --augment_training_data 1
+```
+
+Evalute the generated prediction using the [BLEU score](https://machinelearningmastery.com/calculate-bleu-score-for-text-python/)
+```sh
+cd src
+
+# evaluate single GUI prediction
+python evaluate_single_gui.py --original_gui_filepath  {path/to/original/gui/file} \
+      --predicted_gui_filepath {path/to/predicted/gui/file}
+
+# training starting with pretrained model
+python evaluate_batch_guis.py --original_guis_filepath  {path/to/folder/with/original/guis} \
+      --predicted_guis_filepath {path/to/folder/with/predicted/guis}
+```
 
 ## License
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+### The MIT License (MIT)
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Copyright (c) 2018 Ashwin Kumar<ash.nkumar@gmail.com@gmail.com>
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+> THE SOFTWARE.
