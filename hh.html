@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 150px;
+  border: 3px solid #f1f1f1;
+  z-index: 90;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+
+<button class="open-button" onclick="openForm()">Open Form</button>
+
+<div class="form-popup" id="myForm">
+  <form action="/action_page.php" class="form-container">
+    <table>
+    <tr><td>
+    <img src="https://png.pngtree.com/svg/20170602/16ca37099e.png" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;> Adfree</font></td></tr>
+    <tr><td>
+    <img src="https://cdn3.iconfinder.com/data/icons/round-icons-vol-2/512/Save_floppy_deskette-512.png" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;> Store circuit</font></td></tr>
+    <tr><td>
+    <img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/update-15-561750.png" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;> daily New circuits Add</font></td></tr>
+    <tr><td>
+    <img src="https://lh3.googleusercontent.com/proxy/4PhTrUUOPgiPU-EZQWF6-o2Ue60Mi4oTCvrIcuTbMnG-2njkI8zgIDanZud7L_Tgd3jboiMbFI_GkOqYZV3eq_4_otvcHU9kkkjANgOYDVrPXa7zHOPrhRUJhc_Hb-D9uXzzrNDbMjYnef3CyuU9zQxuF7jV4_KD8hKV4Gt9BzB-20E8LtWe8Vf4f5v4ajM5Bf2XGQ4vdzNRx9Z8SOcli7o4B3BOsphP" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;> Upload Your circuit</font></td></tr>
+      <tr><td>
+    <img src="https://www.iconbunny.com/icons/media/catalog/product/4/0/4093.12-resistor-i-icon-iconbunny.jpg" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;> Added New components</font></td></tr>
+    <tr><td>
+    <img src="https://www.igvinc.com/wp-content/uploads/IGV-Mobile-Friendly-Icon-Cropped.png" alt="Flowers in Chania" width="40" height="40"></td><td><font size=3; font-type=bold;>Mobile friendly</font></td></tr>
+    <tr><td colspan="2">
+    <button  onclick="OnClickListener()" ><img src="https://farrellispizza.com/wp-content/uploads/2018/12/GooglePlayBadge.1cacd182.png"  width="200" height="60"></button>
+    </td></tr>
+    <tr><td colspan="2">
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </td></tr>
+  
+<a href="play.google.com/store/apps/details?id=com.appsmak99.EAR6" target="_blank">Click here</a>
+    
+    
+  </form>
+</div>
+
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+</script>
+<script>
+function​ OnClickListener(new OnClickListener() {
+                   Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.appsmak99.EAR6")); // Open precisely @link SmartBooks
+            boolean tryAgain = false; // Flag to denote that normal attempt to launch GooglePlay update failed
+
+            try
+            {
+                startActivity(intent);
+            }
+            catch(Exception e)
+            {
+                tryAgain = true;
+            }
+
+            if (!tryAgain) return;
+
+            // Try to launch GooglePlay with SB in browser !
+            try
+            {
+                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.appsmak99.EAR6"));
+                startActivity(intent);
+            }
+            catch (Exception e)
+            {
+                mEmailView.setError("Unable to run app update automatically. Please run it from GooglePlay manualy.");
+                mEmailView.requestFocus(View.FOCUS_UP);
+            }
+
+            // No need to exit the app, as it already exits
+            //finishAffinity();  // this requires  API level > 16
+            //finish();
+            //System.exit(0);
+        }
+    
+</script>
+</body>
+</html>
